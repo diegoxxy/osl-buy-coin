@@ -11,11 +11,12 @@
         .font-sans-retro { font-family: 'Space Grotesk', sans-serif; }
         
         #sellBtn {
+            /* Transisi responsif untuk efek lompatan jauh */
             transition: transform 0.12s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             will-change: transform;
         }
 
-        /* Flash effect when price updates */
+        /* Flash effect saat harga btc terupdate */
         .price-flash {
             animation: flashGreen 0.5s ease-out;
         }
@@ -28,15 +29,15 @@
 <body class="bg-[#FAF8F5] min-h-screen flex flex-col justify-between font-sans-retro text-slate-800 antialiased overflow-hidden select-none">
 
     <header class="w-full px-8 py-6 flex justify-start items-center bg-transparent">
-        <img src="osl_logo.png" alt="OSL Logo" class="w-20 h-20 object-contain">
+        <img src="osl_logo.png" alt="OSL Logo" class="w-24 h-24 object-contain">
     </header>
 
     <main class="flex-1 flex flex-col items-center justify-center p-4 text-center relative max-w-2xl mx-auto w-full -mt-16">
         
-        <div class="mb-6 relative z-0">
-            <div class="w-40 h-44 bg-[#EFECE6] clip-hex flex items-center justify-center mx-auto opacity-80 shadow-sm relative">
-                <div class="w-28 h-28 bg-white rounded-full flex items-center justify-center shadow-md border border-rose-100 animate-pulse">
-                    <img src="bitcoin.png" alt="Bitcoin" class="w-16 h-16 object-contain">
+        <div class="mb-10 relative z-0">
+            <div class="w-48 h-52 bg-[#EFECE6] clip-hex flex items-center justify-center mx-auto opacity-80 shadow-sm relative">
+                <div class="w-32 h-32 bg-white rounded-full flex items-center justify-center shadow-md border border-rose-100 animate-pulse">
+                    <img src="bitcoin.png" alt="Bitcoin" class="w-24 h-24 object-contain">
                 </div>
             </div>
         </div>
@@ -49,12 +50,12 @@
             </div>
         </div>
 
-        <div class="flex items-center justify-center gap-6 w-full min-h-[140px] relative" id="actionZone">
-            <button id="buyBtn" onclick="handleBuyClick()" class="bg-[#4eb300] hover:bg-[#439900] text-white font-bold text-xl px-14 py-4 rounded-full shadow-lg shadow-green-600/20 cursor-pointer active:scale-95 z-20">
+        <div class="flex items-center justify-center gap-8 w-full max-w-md mx-auto min-h-[140px] relative" id="actionZone">
+            <button id="buyBtn" onclick="handleBuyClick()" class="w-40 bg-[#4eb300] hover:bg-[#439900] text-white font-bold text-xl py-4 rounded-full shadow-lg shadow-green-600/20 cursor-pointer active:scale-95 z-20 text-center">
                 Beli
             </button>
 
-            <button id="sellBtn" class="bg-[#ff2323] hover:bg-[#e01f1f] text-white font-bold text-xl px-14 py-4 rounded-full shadow-lg shadow-red-600/20 z-30 transform select-none">
+            <button id="sellBtn" class="w-40 bg-[#ff2323] hover:bg-[#e01f1f] text-white font-bold text-xl py-4 rounded-full shadow-lg shadow-red-600/20 z-30 transform select-none text-center">
                 Jual
             </button>
         </div>
@@ -70,7 +71,7 @@
         const priceEl = document.getElementById('btcPrice');
         const changeEl = document.getElementById('btcChange');
 
-        // --- SIMULASI LIVE PRICE BTC ---
+        // Simulasi Pergerakan Harga Live
         let basePrice = 67245.50;
         let baseChange = 4.25;
 
@@ -88,8 +89,7 @@
             }
         }, 2000);
 
-
-        // --- LOGIKA TOMBOL JUAL KABUR JAUH ---
+        // Mekanisme Jual Menghindar Luas & Aman Selalu di Dalam Layar
         function dodgeSellButton() {
             const minOffsetX = 350;  
             const maxOffsetX = 650;  
