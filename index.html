@@ -12,7 +12,7 @@
         .font-sans-retro { font-family: 'Space Grotesk', sans-serif; }
         
         #sellBtn {
-            transition: transform 0.1s ease-out;
+            transition: transform 0.12s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             will-change: transform;
         }
     </style>
@@ -21,7 +21,6 @@
 
     <!-- TOP BAR -->
     <header class="w-full px-8 py-6 flex justify-start items-center bg-transparent">
-        <!-- OSL Logo Diperbesar -->
         <img src="osl_logo.png" alt="OSL Logo" class="w-20 h-20 object-contain">
     </header>
 
@@ -31,7 +30,6 @@
         <!-- Bitcoin Center Piece -->
         <div class="mb-8 relative z-0">
             <div class="w-40 h-44 bg-[#EFECE6] clip-hex flex items-center justify-center mx-auto opacity-80 shadow-sm relative">
-                <!-- Memanggil file bitcoin.png -->
                 <div class="w-28 h-28 bg-white rounded-full flex items-center justify-center shadow-md border border-rose-100 animate-pulse">
                     <img src="bitcoin.png" alt="Bitcoin" class="w-16 h-16 object-contain">
                 </div>
@@ -42,13 +40,15 @@
             Apakah kamu akan membeli coin ini?
         </h1>
 
-        <!-- BUTTONS -->
-        <div class="flex items-center justify-center gap-6 w-full min-h-[120px] relative" id="actionZone">
+        <!-- BUTTONS CONTAINER -->
+        <div class="flex items-center justify-center gap-6 w-full min-h-[140px] relative" id="actionZone">
+            <!-- BUY BUTTON (Fixed Size) -->
             <button id="buyBtn" onclick="handleBuyClick()" class="bg-[#ADFF2F] hover:bg-[#96EC16] text-slate-900 font-bold text-xl px-12 py-4 rounded-full shadow-lg shadow-lime-500/20 cursor-pointer active:scale-95 z-20">
                 BUY
             </button>
 
-            <button id="sellBtn" class="bg-[#E11D48] hover:bg-[#BE123C] text-white font-bold text-lg px-10 py-3.5 rounded-full shadow-md shadow-rose-500/10 z-30 transform transition-all duration-100 select-none">
+            <!-- SELL BUTTON (Horizontal / Upward Dodge Only) -->
+            <button id="sellBtn" class="bg-[#E11D48] hover:bg-[#BE123C] text-white font-bold text-lg px-10 py-3.5 rounded-full shadow-md shadow-rose-500/10 z-30 transform select-none">
                 SELL
             </button>
         </div>
@@ -56,7 +56,7 @@
     </main>
 
     <!-- FOOTER -->
-    <footer class="w-full py-6 text-center text-xs text-slate-400 font-medium">
+    <footer class="w-full py-6 text-center text-xs text-slate-400 font-medium z-10">
         &copy; 2026 OSL Indonesia.
     </footer>
 
@@ -65,13 +65,21 @@
         const sellBtn = document.getElementById('sellBtn');
 
         function dodgeSellButton() {
-            const maxOffset = 90; 
-            const minOffset = 40;
-            let offsetX = (Math.random() * (maxOffset - minOffset) + minOffset) * (Math.random() < 0.5 ? -1 : 1);
-            let offsetY = (Math.random() * (maxOffset - minOffset) + minOffset) * (Math.random() < 0.5 ? -1 : 1);
-            sellBtn.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+            // Tentukan jarak lompatan acak ke samping (X)
+            const maxOffsetX = 120;
+            const minOffsetX = 50;
+            let offsetX = (Math.random() * (maxOffsetX - minOffsetX) + minOffsetX) * (Math.random() < 0.5 ? -1 : 1);
+
+            // Tentukan lompatan ke atas (Y harus bernilai NEGATIF agar tombol bergerak naik ke atas, bukan ke bawah)
+            const maxOffsetY = 100;
+            const minOffsetY = 30;
+            let offsetY = -(Math.random() * (maxOffsetY - minOffsetY) + minOffsetY); 
+
+            // Eksekusi pergerakan tombol
+            sellBtn.style.transform = `translate(${offsetX}px, ${offsetY}px) rotate(${offsetX * 0.05}deg)`;
         }
 
+        // Event listener saat kursor mendekat atau menyentuh tombol SELL
         sellBtn.addEventListener('mouseenter', dodgeSellButton);
         sellBtn.addEventListener('mouseover', dodgeSellButton);
         sellBtn.addEventListener('touchstart', (e) => {
@@ -81,7 +89,7 @@
 
         function handleBuyClick() {
             alert('🎉 Transaksi Berhasil! Welcome to the OSL Alpha Clan.');
-            sellBtn.style.transform = 'translate(0px, 0px)';
+            sellBtn.style.transform = 'translate(0px, 0px) rotate(0deg)';
         }
     </script>
 
