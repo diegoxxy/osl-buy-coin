@@ -12,9 +12,17 @@
         .font-sans-retro { font-family: 'Space Grotesk', sans-serif; }
         
         #sellBtn {
-            /* Kecepatan transisi dipertahankan responsif untuk lompatan jauh */
             transition: transform 0.12s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             will-change: transform;
+        }
+
+        /* Flash effect when price updates */
+        .price-flash {
+            animation: flashGreen 0.5s ease-out;
+        }
+        @keyframes flashGreen {
+            0% { color: #22c55e; }
+            100% { color: #1e293b; }
         }
     </style>
 </head>
@@ -26,7 +34,7 @@
 
     <main class="flex-1 flex flex-col items-center justify-center p-4 text-center relative max-w-2xl mx-auto w-full -mt-12">
         
-        <div class="mb-8 relative z-0">
+        <div class="mb-6 relative z-0">
             <div class="w-40 h-44 bg-[#EFECE6] clip-hex flex items-center justify-center mx-auto opacity-80 shadow-sm relative">
                 <div class="w-28 h-28 bg-white rounded-full flex items-center justify-center shadow-md border border-rose-100 animate-pulse">
                     <img src="bitcoin.png" alt="Bitcoin" class="w-16 h-16 object-contain">
@@ -34,17 +42,25 @@
             </div>
         </div>
 
+        <div class="mb-4 flex flex-col items-center gap-1">
+            <span class="text-2xl font-bold tracking-wider text-slate-900 bg-slate-200/60 px-4 py-1 rounded-md">BTC / USD</span>
+            <div class="flex items-center gap-3 mt-1">
+                <span id="btcPrice" class="text-3xl font-extrabold tracking-tight text-slate-800">$67,245.50</span>
+                <span id="btcChange" class="text-lg font-bold text-green-500 bg-green-50 px-2.5 py-0.5 rounded-md border border-green-200">+4.25%</span>
+            </div>
+        </div>
+
         <h1 class="font-serif-retro text-4xl md:text-5xl text-[#E11D48] leading-tight font-bold px-4 mb-12 max-w-xl">
-            Apakah kamu akan membeli coin ini?
+            Apakah kamu akan membeli BTC?
         </h1>
 
         <div class="flex items-center justify-center gap-6 w-full min-h-[140px] relative" id="actionZone">
-            <button id="buyBtn" onclick="handleBuyClick()" class="bg-[#ADFF2F] hover:bg-[#96EC16] text-slate-900 font-bold text-xl px-12 py-4 rounded-full shadow-lg shadow-lime-500/20 cursor-pointer active:scale-95 z-20">
-                BUY
+            <button id="buyBtn" onclick="handleBuyClick()" class="bg-[#4eb300] hover:bg-[#439900] text-white font-bold text-xl px-14 py-4 rounded-full shadow-lg shadow-green-600/20 cursor-pointer active:scale-95 z-20">
+                Beli
             </button>
 
-            <button id="sellBtn" class="bg-[#E11D48] hover:bg-[#BE123C] text-white font-bold text-lg px-10 py-3.5 rounded-full shadow-md shadow-rose-500/10 z-30 transform select-none">
-                SELL
+            <button id="sellBtn" class="bg-[#ff2323] hover:bg-[#e01f1f] text-white font-bold text-xl px-14 py-4 rounded-full shadow-lg shadow-red-600/20 z-30 transform select-none">
+                Jual
             </button>
         </div>
 
@@ -56,33 +72,52 @@
 
     <script>
         const sellBtn = document.getElementById('sellBtn');
+        const priceEl = document.getElementById('btcPrice');
+        const changeEl = document.getElementById('btcChange');
 
+        // --- SIMULASI LIVE PRICE BTC ---
+        let basePrice = 67245.50;
+        let baseChange = 4.25;
+
+        setInterval(() => {
+            // Berikan fluktuasi acak kecil pada harga
+            const cryptoFluctuation = (Math.random() - 0.45) * 15; 
+            basePrice += cryptoFluctuation;
+            
+            // Sedikit ubah persentase harian mengikuti fluktuasi
+            baseChange += (cryptoFluctuation / 1000);
+
+            // Format harga ke mata uang USD
+            priceEl.innerText = `$${basePrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+            changeEl.innerText = `+${baseChange.toFixed(2)}%`;
+
+            // Efek berkedip saat harga berubah naik
+            if (cryptoFluctuation > 0) {
+                priceEl.classList.add('price-flash');
+                setTimeout(() => priceEl.classList.remove('price-flash'), 500);
+            }
+        }, 2000); // Update setiap 2 detik sekali
+
+
+        // --- LOGIKA TOMBOL JUAL KABUR JAUH ---
         function dodgeSellButton() {
-            // Area jangkauan horizontal diperluas maksimal (bisa sampai ujung kanan/kiri halaman)
-            const minOffsetX = 350;  // Lompatan minimal langsung sejauh 350px
-            const maxOffsetX = 650;  // Lompatan maksimal mencapai 650px
+            const minOffsetX = 350;  
+            const maxOffsetX = 650;  
             let offsetX = (Math.random() * (maxOffsetX - minOffsetX) + minOffsetX) * (Math.random() < 0.5 ? -1 : 1);
 
-            // Area jangkauan vertikal ke atas juga dipertinggi secara maksimal
-            const minOffsetY = 180;  // Lompatan minimal ke atas 180px
-            const maxOffsetY = 380;  // Lompatan maksimal ke atas hingga 380px
+            const minOffsetY = 180;  
+            const maxOffsetY = 380;  
             let offsetY = -(Math.random() * (maxOffsetY - minOffsetY) + minOffsetY); 
 
-            // Kalkulasi batas pengaman dinamis agar tombol tidak mental keluar dari batas layar browser (Viewport)
             const btnRect = sellBtn.getBoundingClientRect();
             
-            // Jaga batas kiri & kanan layar
             if (btnRect.left + offsetX < 20) offsetX = 350;
             if (btnRect.right + offsetX > window.innerWidth - 20) offsetX = -350;
-            
-            // Jaga batas atas layar agar tidak kelewat ke atas header
             if (btnRect.top + offsetY < 80) offsetY = -180;
 
-            // Eksekusi perpindahan gaya 'teleportasi jauh'
             sellBtn.style.transform = `translate(${offsetX}px, ${offsetY}px) rotate(${offsetX * 0.05}deg)`;
         }
 
-        // Trigger interaksi
         sellBtn.addEventListener('mouseenter', dodgeSellButton);
         sellBtn.addEventListener('mouseover', dodgeSellButton);
         sellBtn.addEventListener('touchstart', (e) => {
