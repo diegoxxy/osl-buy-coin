@@ -12,8 +12,8 @@
         .font-sans-retro { font-family: 'Space Grotesk', sans-serif; }
         
         #sellBtn {
-            /* Transisi dibikin sedikit lebih cepat biar efek nge-dash jauhnya berasa responsif */
-            transition: transform 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            /* Kecepatan transisi dipertahankan responsif untuk lompatan jauh */
+            transition: transform 0.12s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             will-change: transform;
         }
     </style>
@@ -58,21 +58,31 @@
         const sellBtn = document.getElementById('sellBtn');
 
         function dodgeSellButton() {
-            // Jangkauan lompatan horizontal (X) diperjauh
-            const minOffsetX = 160;  // Minimal sejauh 160px dari posisi awal
-            const maxOffsetX = 320;  // Maksimal sejauh 320px
+            // Area jangkauan horizontal diperluas maksimal (bisa sampai ujung kanan/kiri halaman)
+            const minOffsetX = 350;  // Lompatan minimal langsung sejauh 350px
+            const maxOffsetX = 650;  // Lompatan maksimal mencapai 650px
             let offsetX = (Math.random() * (maxOffsetX - minOffsetX) + minOffsetX) * (Math.random() < 0.5 ? -1 : 1);
 
-            // Jangkauan lompatan vertikal ke atas (Y) juga dipertinggi
-            const minOffsetY = 120;  // Minimal melompat naik 120px
-            const maxOffsetY = 240;  // Maksimal melompat naik 240px
+            // Area jangkauan vertikal ke atas juga dipertinggi secara maksimal
+            const minOffsetY = 180;  // Lompatan minimal ke atas 180px
+            const maxOffsetY = 380;  // Lompatan maksimal ke atas hingga 380px
             let offsetY = -(Math.random() * (maxOffsetY - minOffsetY) + minOffsetY); 
 
-            // Eksekusi animasi perpindahan posisi jauh
-            sellBtn.style.transform = `translate(${offsetX}px, ${offsetY}px) rotate(${offsetX * 0.08}deg)`;
+            // Kalkulasi batas pengaman dinamis agar tombol tidak mental keluar dari batas layar browser (Viewport)
+            const btnRect = sellBtn.getBoundingClientRect();
+            
+            // Jaga batas kiri & kanan layar
+            if (btnRect.left + offsetX < 20) offsetX = 350;
+            if (btnRect.right + offsetX > window.innerWidth - 20) offsetX = -350;
+            
+            // Jaga batas atas layar agar tidak kelewat ke atas header
+            if (btnRect.top + offsetY < 80) offsetY = -180;
+
+            // Eksekusi perpindahan gaya 'teleportasi jauh'
+            sellBtn.style.transform = `translate(${offsetX}px, ${offsetY}px) rotate(${offsetX * 0.05}deg)`;
         }
 
-        // Event listener pas dideketin cursor atau di-touch
+        // Trigger interaksi
         sellBtn.addEventListener('mouseenter', dodgeSellButton);
         sellBtn.addEventListener('mouseover', dodgeSellButton);
         sellBtn.addEventListener('touchstart', (e) => {
