@@ -26,18 +26,16 @@
 </head>
 <body class="bg-[#FAF8F5] min-h-screen flex flex-col justify-between font-sans-retro text-slate-800 antialiased overflow-hidden select-none">
 
-    <!-- TOP BAR: OSL Branding (Logo Only) -->
+    <!-- TOP BAR: OSL Branding (Logo Image) -->
     <header class="w-full px-6 py-4 flex justify-between items-center bg-transparent">
         <div class="flex items-center">
-            <!-- Custom Accurate OSL Logo Path Based on osl_logo.png -->
-            <svg class="w-12 h-12 text-[#ADFF2F]" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
-                <!-- Letter O -->
-                <rect x="15" y="25" width="22" height="50" rx="11" />
-                <!-- Letter S -->
-                <path d="M70 36 C70 28, 48 24, 48 36 C48 48, 70 46, 70 58 C70 70, 48 72, 48 62" />
-                <!-- Letter L -->
-                <path d="M82 25 L82 72 L95 72" />
-            </svg>
+            <!-- Memanggil file osl_logo.png yang di-upload ke GitHub -->
+            <img src="osl_logo.png" alt="OSL Logo" class="w-12 h-12 object-contain" onerror="this.style.display='none'; document.getElementById('fallback-logo').style.display='block';">
+            
+            <!-- Backup Logo berupa teks/SVG jika gambar belum di-upload ke GitHub -->
+            <div id="fallback-logo" class="hidden">
+                <span class="text-3xl font-bold tracking-tighter text-[#ADFF2F]">OSL</span>
+            </div>
         </div>
         <div class="text-xs uppercase tracking-widest text-slate-400 font-bold bg-slate-200/50 px-4 py-1.5 rounded-full backdrop-blur-sm">
             ON-CHAIN LABS [ALPHA]
@@ -45,10 +43,10 @@
     </header>
 
     <!-- MAIN CONTENT -->
-    <main class="flex-1 flex flex-col items-center justify-center p-4 text-center relative max-w-2xl mx-auto w-full -mt-12">
+    <main class="flex-1 flex flex-col items-center justify-center p-4 text-center relative max-w-2xl mx-auto w-full -mt-6">
         
         <!-- Bitcoin Center Piece Layout from image_be683e.png -->
-        <div class="mb-4 relative z-0">
+        <div class="mb-8 relative z-0">
             <!-- Hexagon Background Frame -->
             <div class="w-36 h-40 bg-[#EFECE6] clip-hex flex items-center justify-center mx-auto opacity-80 shadow-sm relative">
                 <!-- Inner Glowing Circle with Bitcoin Icon -->
@@ -57,11 +55,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- Sub-header -->
-        <p class="text-xs font-bold tracking-widest text-[#E11D48] uppercase mb-3 flex items-center gap-1">
-            ⚠️ COIN ALLOCATION REQUEST APPROVED
-        </p>
 
         <!-- Main Question (Indonesian & Exact Retro Styling) -->
         <h1 class="font-serif-retro text-4xl md:text-5xl text-[#E11D48] leading-tight font-bold px-4 mb-12 max-w-xl">
@@ -76,7 +69,7 @@
                 BUY
             </button>
 
-            <!-- SELL BUTTON (Now Red and Runs Locally) -->
+            <!-- SELL BUTTON (Runs Locally & Set to Red color based on latest image) -->
             <button id="sellBtn" class="bg-[#E11D48] hover:bg-[#BE123C] text-white font-bold text-lg px-10 py-3.5 rounded-full shadow-md shadow-rose-500/10 z-30 transform transition-all duration-100 select-none">
                 SELL
             </button>
@@ -87,7 +80,7 @@
 
     <!-- FOOTER -->
     <footer class="w-full py-6 text-center text-xs text-slate-400 font-medium">
-        &copy; 2026 OSL Ecosystem. No Pressure But... Just Buy Assets.
+        &copy; 2026 OSL Indonesia.
     </footer>
 
     <!-- INTERACTION LOGIC -->
@@ -99,30 +92,24 @@
 
         // Function to shuffle the SELL button slightly within its area
         function dodgeSellButton() {
-            // Jarak maksimum pergeseran dari posisi asli (dalam pixel)
             const maxOffset = 90; 
             const minOffset = 40;
 
-            // Tentukan arah acak (bisa positif atau negatif)
             let offsetX = (Math.random() * (maxOffset - minOffset) + minOffset) * (Math.random() < 0.5 ? -1 : 1);
             let offsetY = (Math.random() * (maxOffset - minOffset) + minOffset) * (Math.random() < 0.5 ? -1 : 1);
 
-            // Gunakan CSS Translate agar tombol bergerak lincah di sekitar areanya saja
             sellBtn.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
         }
 
-        // Trigger geser saat kursor mendekat atau menyentuh tombol SELL
         sellBtn.addEventListener('mouseenter', dodgeSellButton);
         sellBtn.addEventListener('mouseover', dodgeSellButton);
         sellBtn.addEventListener('touchstart', (e) => {
-            e.preventDefault(); // Mencegah kepencet di mobile haptic
+            e.preventDefault(); 
             dodgeSellButton();
         });
 
-        // Handle BUY trigger
         function handleBuyClick() {
             alert('🎉 Transaksi Berhasil! Welcome to the OSL Alpha Clan.');
-            // Reset posisi tombol sell ke tengah semula
             sellBtn.style.transform = 'translate(0px, 0px)';
         }
     </script>
