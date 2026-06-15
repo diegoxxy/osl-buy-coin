@@ -4,20 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OSL Token Purchase</title>
-    <!-- Tailwind CSS for Quick Vibecoding -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <!-- Lucide Icons for Bitcoin & Styling -->
-    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Space+Grotesk:wght@500;700&display=swap');
         
-        .font-serif-retro {
-            font-family: 'Playfair Display', serif;
-        }
-        .font-sans-retro {
-            font-family: 'Space Grotesk', sans-serif;
-        }
-        /* Smooth transitions for the shaking/moving button */
+        .font-serif-retro { font-family: 'Playfair Display', serif; }
+        .font-sans-retro { font-family: 'Space Grotesk', sans-serif; }
+        
         #sellBtn {
             transition: transform 0.1s ease-out;
             will-change: transform;
@@ -26,54 +19,38 @@
 </head>
 <body class="bg-[#FAF8F5] min-h-screen flex flex-col justify-between font-sans-retro text-slate-800 antialiased overflow-hidden select-none">
 
-    <!-- TOP BAR: OSL Branding (Logo Image) -->
-    <header class="w-full px-6 py-4 flex justify-between items-center bg-transparent">
-        <div class="flex items-center">
-            <!-- Memanggil file osl_logo.png yang di-upload ke GitHub -->
-            <img src="osl_logo.png" alt="OSL Logo" class="w-12 h-12 object-contain" onerror="this.style.display='none'; document.getElementById('fallback-logo').style.display='block';">
-            
-            <!-- Backup Logo berupa teks/SVG jika gambar belum di-upload ke GitHub -->
-            <div id="fallback-logo" class="hidden">
-                <span class="text-3xl font-bold tracking-tighter text-[#ADFF2F]">OSL</span>
-            </div>
-        </div>
-        <div class="text-xs uppercase tracking-widest text-slate-400 font-bold bg-slate-200/50 px-4 py-1.5 rounded-full backdrop-blur-sm">
-            ON-CHAIN LABS [ALPHA]
-        </div>
+    <!-- TOP BAR -->
+    <header class="w-full px-8 py-6 flex justify-start items-center bg-transparent">
+        <!-- OSL Logo Diperbesar -->
+        <img src="osl_logo.png" alt="OSL Logo" class="w-20 h-20 object-contain">
     </header>
 
     <!-- MAIN CONTENT -->
-    <main class="flex-1 flex flex-col items-center justify-center p-4 text-center relative max-w-2xl mx-auto w-full -mt-6">
+    <main class="flex-1 flex flex-col items-center justify-center p-4 text-center relative max-w-2xl mx-auto w-full -mt-12">
         
-        <!-- Bitcoin Center Piece Layout from image_be683e.png -->
+        <!-- Bitcoin Center Piece -->
         <div class="mb-8 relative z-0">
-            <!-- Hexagon Background Frame -->
-            <div class="w-36 h-40 bg-[#EFECE6] clip-hex flex items-center justify-center mx-auto opacity-80 shadow-sm relative">
-                <!-- Inner Glowing Circle with Bitcoin Icon -->
-                <div class="w-24 h-24 bg-white rounded-full flex items-center justify-center shadow-md border border-rose-100 animate-pulse">
-                    <i data-lucide="bitcoin" class="w-14 h-14 text-[#E11D48]"></i>
+            <div class="w-40 h-44 bg-[#EFECE6] clip-hex flex items-center justify-center mx-auto opacity-80 shadow-sm relative">
+                <!-- Memanggil file bitcoin.png -->
+                <div class="w-28 h-28 bg-white rounded-full flex items-center justify-center shadow-md border border-rose-100 animate-pulse">
+                    <img src="bitcoin.png" alt="Bitcoin" class="w-16 h-16 object-contain">
                 </div>
             </div>
         </div>
 
-        <!-- Main Question (Indonesian & Exact Retro Styling) -->
         <h1 class="font-serif-retro text-4xl md:text-5xl text-[#E11D48] leading-tight font-bold px-4 mb-12 max-w-xl">
             Apakah kamu akan membeli coin ini?
         </h1>
 
-        <!-- BUTTONS INTERACTION ZONE -->
+        <!-- BUTTONS -->
         <div class="flex items-center justify-center gap-6 w-full min-h-[120px] relative" id="actionZone">
-            
-            <!-- BUY BUTTON (OSL Green and Fixed Size) -->
             <button id="buyBtn" onclick="handleBuyClick()" class="bg-[#ADFF2F] hover:bg-[#96EC16] text-slate-900 font-bold text-xl px-12 py-4 rounded-full shadow-lg shadow-lime-500/20 cursor-pointer active:scale-95 z-20">
                 BUY
             </button>
 
-            <!-- SELL BUTTON (Runs Locally & Set to Red color based on latest image) -->
             <button id="sellBtn" class="bg-[#E11D48] hover:bg-[#BE123C] text-white font-bold text-lg px-10 py-3.5 rounded-full shadow-md shadow-rose-500/10 z-30 transform transition-all duration-100 select-none">
                 SELL
             </button>
-            
         </div>
 
     </main>
@@ -85,19 +62,13 @@
 
     <!-- INTERACTION LOGIC -->
     <script>
-        // Init Lucide Vector Icons
-        lucide.createIcons();
-
         const sellBtn = document.getElementById('sellBtn');
 
-        // Function to shuffle the SELL button slightly within its area
         function dodgeSellButton() {
             const maxOffset = 90; 
             const minOffset = 40;
-
             let offsetX = (Math.random() * (maxOffset - minOffset) + minOffset) * (Math.random() < 0.5 ? -1 : 1);
             let offsetY = (Math.random() * (maxOffset - minOffset) + minOffset) * (Math.random() < 0.5 ? -1 : 1);
-
             sellBtn.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
         }
 
@@ -114,11 +85,8 @@
         }
     </script>
 
-    <!-- Hexagon Clipper Style -->
     <style>
-        .clip-hex {
-            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-        }
+        .clip-hex { clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); }
     </style>
 </body>
 </html>
