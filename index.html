@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OSL Token Purchase</title>
+    <!-- Tailwind CSS for Quick Vibecoding -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- Lucide Icons for Bitcoin & Styling -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Space+Grotesk:wght@500;700&display=swap');
@@ -15,22 +17,25 @@
         .font-sans-retro {
             font-family: 'Space Grotesk', sans-serif;
         }
-        /* Smooth transition for the "Buy" button scaling up */
-        #buyBtn {
-            transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
+        /* Smooth transitions for the shaking/moving button */
         #sellBtn {
-            transition: left 0.1s ease-out, top 0.1s ease-out;
+            transition: transform 0.1s ease-out;
+            will-change: transform;
         }
     </style>
 </head>
 <body class="bg-[#FAF8F5] min-h-screen flex flex-col justify-between font-sans-retro text-slate-800 antialiased overflow-hidden select-none">
 
+    <!-- TOP BAR: OSL Branding (Logo Only) -->
     <header class="w-full px-6 py-4 flex justify-between items-center bg-transparent">
         <div class="flex items-center">
+            <!-- Custom Accurate OSL Logo Path Based on osl_logo.png -->
             <svg class="w-12 h-12 text-[#ADFF2F]" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+                <!-- Letter O -->
                 <rect x="15" y="25" width="22" height="50" rx="11" />
+                <!-- Letter S -->
                 <path d="M70 36 C70 28, 48 24, 48 36 C48 48, 70 46, 70 58 C70 70, 48 72, 48 62" />
+                <!-- Letter L -->
                 <path d="M82 25 L82 72 L95 72" />
             </svg>
         </div>
@@ -39,31 +44,40 @@
         </div>
     </header>
 
+    <!-- MAIN CONTENT -->
     <main class="flex-1 flex flex-col items-center justify-center p-4 text-center relative max-w-2xl mx-auto w-full -mt-12">
         
+        <!-- Bitcoin Center Piece Layout from image_be683e.png -->
         <div class="mb-4 relative z-0">
+            <!-- Hexagon Background Frame -->
             <div class="w-36 h-40 bg-[#EFECE6] clip-hex flex items-center justify-center mx-auto opacity-80 shadow-sm relative">
+                <!-- Inner Glowing Circle with Bitcoin Icon -->
                 <div class="w-24 h-24 bg-white rounded-full flex items-center justify-center shadow-md border border-rose-100 animate-pulse">
                     <i data-lucide="bitcoin" class="w-14 h-14 text-[#E11D48]"></i>
                 </div>
             </div>
         </div>
 
+        <!-- Sub-header -->
         <p class="text-xs font-bold tracking-widest text-[#E11D48] uppercase mb-3 flex items-center gap-1">
             ⚠️ COIN ALLOCATION REQUEST APPROVED
         </p>
 
+        <!-- Main Question (Indonesian & Exact Retro Styling) -->
         <h1 class="font-serif-retro text-4xl md:text-5xl text-[#E11D48] leading-tight font-bold px-4 mb-12 max-w-xl">
             Apakah kamu akan membeli coin ini?
         </h1>
 
+        <!-- BUTTONS INTERACTION ZONE -->
         <div class="flex items-center justify-center gap-6 w-full min-h-[120px] relative" id="actionZone">
             
-            <button id="buyBtn" onclick="handleBuyClick()" class="bg-[#E11D48] hover:bg-[#BE123C] text-white font-bold text-xl px-12 py-4 rounded-full shadow-lg shadow-rose-500/20 cursor-pointer active:scale-95 z-20">
+            <!-- BUY BUTTON (Now OSL Green and Fixed Size) -->
+            <button id="buyBtn" onclick="handleBuyClick()" class="bg-[#ADFF2F] hover:bg-[#96EC16] text-slate-900 font-bold text-xl px-12 py-4 rounded-full shadow-lg shadow-lime-500/20 cursor-pointer active:scale-95 z-20">
                 BUY
             </button>
 
-            <button id="sellBtn" class="bg-[#D97706] hover:bg-[#B45309] text-white font-bold text-lg px-10 py-3.5 rounded-full shadow-md shadow-amber-500/10 z-30 transition-all duration-75">
+            <!-- SELL BUTTON (The Local Runner) -->
+            <button id="sellBtn" class="bg-[#D97706] text-white font-bold text-lg px-10 py-3.5 rounded-full shadow-md shadow-amber-500/10 z-30 transform transition-all duration-100 select-none">
                 SELL
             </button>
             
@@ -71,68 +85,49 @@
 
     </main>
 
+    <!-- FOOTER -->
     <footer class="w-full py-6 text-center text-xs text-slate-400 font-medium">
         &copy; 2026 OSL Ecosystem. No Pressure But... Just Buy Assets.
     </footer>
 
+    <!-- INTERACTION LOGIC -->
     <script>
         // Init Lucide Vector Icons
         lucide.createIcons();
 
         const sellBtn = document.getElementById('sellBtn');
-        const buyBtn = document.getElementById('buyBtn');
-        
-        let buyScale = 1;
 
-        // Function to move the SELL button away instantly
-        function teleportSellButton(e) {
-            // Safe boundaries inside the visible viewport
-            const padding = 50;
-            const maxX = window.innerWidth - sellBtn.offsetWidth - padding;
-            const maxY = window.innerHeight - sellBtn.offsetHeight - padding;
-            
-            // Randomize coordinate points
-            let randomX = Math.max(padding, Math.floor(Math.random() * maxX));
-            let randomY = Math.max(padding, Math.floor(Math.random() * maxY));
+        // Function to shuffle the SELL button slightly within its area
+        function dodgeSellButton() {
+            // Jarak maksimum pergeseran dari posisi asli (dalam pixel)
+            const maxOffset = 90; 
+            const minOffset = 40;
 
-            // Anti-overlap: ensure it doesn't accidentally teleport right onto the BUY button
-            const buyRect = buyBtn.getBoundingClientRect();
-            if (randomX > buyRect.left - 40 && randomX < buyRect.right + 40 &&
-                randomY > buyRect.top - 40 && randomY < buyRect.bottom + 40) {
-                randomX += 150;
-                randomY += 150;
-            }
+            // Tentukan arah acak (bisa positif atau negatif)
+            let offsetX = (Math.random() * (maxOffset - minOffset) + minOffset) * (Math.random() < 0.5 ? -1 : 1);
+            let offsetY = (Math.random() * (maxOffset - minOffset) + minOffset) * (Math.random() < 0.5 ? -1 : 1);
 
-            // Apply style transformations
-            sellBtn.style.position = 'fixed';
-            sellBtn.style.left = `${randomX}px`;
-            sellBtn.style.top = `${randomY}px`;
-            sellBtn.style.margin = '0';
-
-            // Increase BUY button size to make it unmissable
-            buyScale += 0.2;
-            buyBtn.style.transform = `scale(${buyScale})`;
+            // Gunakan CSS Translate agar tombol bergerak lincah di sekitar areanya saja
+            sellBtn.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
         }
 
-        // Mouse & Touch triggers for maximum responsiveness
-        sellBtn.addEventListener('mouseenter', teleportSellButton);
-        sellBtn.addEventListener('mouseover', teleportSellButton);
+        // Trigger geser saat kursor mendekat atau menyentuh tombol SELL
+        sellBtn.addEventListener('mouseenter', dodgeSellButton);
+        sellBtn.addEventListener('mouseover', dodgeSellButton);
         sellBtn.addEventListener('touchstart', (e) => {
-            e.preventDefault(); // Block click triggers on mobile devices
-            teleportSellButton();
+            e.preventDefault(); // Mencegah kepencet di mobile haptic
+            dodgeSellButton();
         });
 
         // Handle BUY trigger
         function handleBuyClick() {
             alert('🎉 Transaksi Berhasil! Welcome to the OSL Alpha Clan.');
-            // Reset to default state
-            buyScale = 1;
-            buyBtn.style.transform = `scale(1)`;
-            sellBtn.style.position = 'static';
-            sellBtn.style.margin = '0';
+            // Reset posisi tombol sell ke tengah semula
+            sellBtn.style.transform = 'translate(0px, 0px)';
         }
     </script>
 
+    <!-- Hexagon Clipper Style -->
     <style>
         .clip-hex {
             clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
