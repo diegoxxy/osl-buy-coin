@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OSL Token Purchase</title>
+    <!-- Tailwind CSS for Quick Vibecoding -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- Lucide Icons for OSL Style Logo -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Space+Grotesk:wght@500;700&display=swap');
+        
+        .font-serif-retro {
+            font-family: 'Playfair Display', serif;
+        }
+        .font-sans-retro {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        /* Smooth transition for the "Buy" button growing */
+        #buyBtn {
+            transition: transform 0.2s ease, padding 0.2s ease;
+        }
+    </style>
+</head>
+<body class="bg-[#F9F6EE] min-h-screen flex flex-col justify-between font-sans-retro text-slate-800 antialiased overflow-hidden select-none">
+
+    <!-- TOP BAR: OSL Branding -->
+    <header class="w-full px-6 py-4 flex justify-between items-center border-b border-slate-200/60 bg-white/50 backdrop-blur-md">
+        <div class="flex items-center gap-2">
+            <i data-lucide="hexagon" class="w-6 h-6 text-emerald-600 animate-spin-[spin_4s_linear_infinite]"></i>
+            <span class="font-bold tracking-wider text-lg text-slate-900">OSL</span>
+        </div>
+        <div class="text-xs uppercase tracking-widest text-slate-500 font-bold bg-slate-100 px-3 py-1 rounded-full">
+            On-Chain Labs [Alpha]
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-1 flex flex-col items-center justify-center p-4 text-center relative max-w-xl mx-auto w-full">
+        
+        <!-- Character / Mascot Placeholder -->
+        <div class="mb-6 relative">
+            <div class="w-32 h-32 bg-rose-100 rounded-full flex items-center justify-center mx-auto border-4 border-white shadow-lg animate-bounce">
+                <!-- Mascot icon replace with image if you have one -->
+                <i data-lucide="coins" class="w-16 h-16 text-rose-500"></i>
+            </div>
+            <!-- OSL Watermark Background -->
+            <div class="absolute -inset-10 opacity-5 pointer-events-none flex items-center justify-center">
+                <i data-lucide="hexagon" class="w-48 h-48 text-slate-900"></i>
+            </div>
+        </div>
+
+        <!-- Sub-header -->
+        <p class="text-xs font-bold tracking-widest text-rose-500 uppercase mb-2">
+            ⚠️ COIN ALLOCATION REQUEST APPROVED
+        </p>
+
+        <!-- Main Question (Retro Serif Style from image_be860a.png) -->
+        <h1 class="font-serif-retro text-4xl md:text-5xl text-[#E11D48] leading-tight font-bold px-4 mb-12">
+            Execute OSL Token purchase?
+        </h1>
+
+        <!-- BUTTONS CONTAINER -->
+        <div class="flex items-center justify-center gap-6 w-full min-h-[80px] relative" id="buttonContainer">
+            
+            <!-- BUY BUTTON (The Only Choice) -->
+            <button id="buyBtn" onclick="handleBuyClick()" class="bg-[#E11D48] hover:bg-[#BE123C] text-white font-bold text-xl px-10 py-4 rounded-full shadow-lg shadow-rose-500/30 cursor-pointer active:scale-95 z-10">
+                BUY
+            </button>
+
+            <!-- SELL BUTTON (The Runner) -->
+            <button id="sellBtn" class="absolute bg-[#D97706] text-white font-bold text-lg px-8 py-3.5 rounded-full shadow-lg shadow-amber-500/20 transition-all duration-100 ease-out cursor-default">
+                SELL
+            </button>
+            
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="w-full py-4 text-center text-xs text-slate-400 border-t border-slate-200/40 bg-white/30">
+        &copy; 2026 OSL Ecosystem. No Pressure But... Just Buy Assets.
+    </footer>
+
+    <!-- INTERACTION SCRIPT -->
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        const sellBtn = document.getElementById('sellBtn');
+        const buyBtn = document.getElementById('buyBtn');
+        const container = document.getElementById('buttonContainer');
+        
+        let buyScale = 1;
+
+        // Function to move the SELL button randomly within safe boundaries
+        function runAway() {
+            // Get viewport boundaries to avoid button flying off-screen completely
+            const padding = 40;
+            const maxX = window.innerWidth - sellBtn.offsetWidth - padding;
+            const maxY = window.innerHeight - sellBtn.offsetHeight - padding;
+            
+            // Generate random positions across the screen
+            const randomX = Math.max(padding, Math.floor(Math.random() * maxX));
+            const randomY = Math.max(padding, Math.floor(Math.random() * maxY));
+
+            // Switch to fixed positioning after first trigger to move anywhere on screen
+            sellBtn.style.position = 'fixed';
+            sellBtn.style.left = `${randomX}px`;
+            sellBtn.style.top = `${randomY}px`;
+            sellBtn.style.margin = '0';
+
+            // Make the BUY button bigger every time they try to click SELL
+            buyScale += 0.15;
+            buyBtn.style.transform = `scale(${buyScale})`;
+        }
+
+        // Trigger on both Mouse Hover and Touch for Mobile support
+        sellBtn.addEventListener('mouseenter', runAway);
+        sellBtn.addEventListener('mouseover', runAway);
+        sellBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault(); // Prevents accidental click on mobile
+            runAway();
+        });
+
+        // What happens when they successfully click BUY
+        function handleBuyClick() {
+            alert('🎉 Transaction Successful! Welcome to the OSL Alpha Clan.');
+            // Optional Reset
+            buyScale = 1;
+            buyBtn.style.transform = `scale(1)`;
+            sellBtn.style.position = 'absolute';
+            sellBtn.style.left = 'auto';
+            sellBtn.style.top = 'auto';
+            sellBtn.style.margin = 'auto';
+        }
+    </script>
+</body>
+</html>
